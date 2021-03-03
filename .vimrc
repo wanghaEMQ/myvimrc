@@ -63,17 +63,24 @@ set showmatch
 set ruler
 
 "允许折叠
-set foldenable
+set nofoldenable
 """""""""""""""""设置折叠"""""""""""""""""""""
 "
 "根据语法折叠
-set fdm=syntax
+"set foldmethod=syntax
+set foldmarker={,}
+set foldmethod=marker
+"set foldtext=substitute(getline(v:foldstart),'{.*','{...}',)
+
+autocmd! Syntax c,cpp,h,cc normal zA
+autocmd! Syntax c,cpp,h,cc normal zR
 
 "手动折叠
-set fdm=manual
+"set fdm=manual
+"set foldmethod=indent
 
 "设置键盘映射，通过空格设置折叠
-nnoremap <space> @=((foldclosed(line('.'))<0)?'zc':'zo')<CR>
+nnoremap <space> zA
 """"""""""""""""""""""""""""""""""""""""""""""
 "不要闪烁
 set novisualbell
@@ -104,20 +111,45 @@ set fillchars=stlnc:/
 set splitright
 set splitbelow
 
-nnoremap <C-J> <C-W><C-J>
+nnoremap '<'C-J'>' '<'C-W'>''<'C-J'>'
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-nnoremap <Nul> <C-W><C-W>
+nnoremap <C-M> <C-W><C-W>
+"nnoremap <Nul> <C-W><C-W>
 tnoremap <C-N> <C-\><C-N>
 
 " CTags about
 map <C-]> :split <CR>:exec("tag ".expand("<cword>"))<CR>
-set tags+=~/docu/git/nanomq/tags
-set tags+=~/docu/git/wanghaNanomq/nanomq/tags
-set tags+=~/docu/git/toilet/tags
-"set tags+=~/docu/git/nng/tags
+" set tags+=~/docu/git/nanomq/tags
+" set tags+=~/docu/git/wanghaNanomq/nanomq/tags
+
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+" (Optional) Multi-entry selection UI.
+Plug 'junegunn/fzf'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+" Plug 'fatih/vim-go' 
+" Plug 'SirVer/ultisnips'
+
+call plug#end()
 
 " -------------  
 " Vundle  
@@ -125,20 +157,17 @@ set tags+=~/docu/git/toilet/tags
 " -------------  
   
 " set the runtime path to include Vundle and initialize  
-set rtp+=~/.vim/bundle/Vundle.vim  
-call vundle#begin()  
-" alternatively, pass a path where Vundle should install plugins  
-"call vundle#begin('~/some/path/here')  
+" set rtp+=~/.vim/bundle/Vundle.vim  
+" call vundle#begin()  
   
 " let Vundle manage Vundle, required  
-Plugin 'gmarik/Vundle.vim'  
+" Plugin 'gmarik/Vundle.vim'  
   
 " The following are examples of different formats supported.  
 " Keep Plugin commands between vundle#begin/end.  
 " plugin on GitHub repo  
 " Plugin 'tpope/vim-fugitive'  
 " plugin from http://vim-scripts.org/vim/scripts.html  
-""Plugin 'L9'  
 " Git plugin not hosted on GitHub  
 " Plugin 'git://git.wincent.com/command-t.git'  
 " git repos on your local machine (i.e. when working on your own plugin)  
@@ -149,62 +178,47 @@ Plugin 'gmarik/Vundle.vim'
 " Avoid a name conflict with L9  
 ""Plugin 'user/L9', {'name': 'newL9'}
 
-" Install Vim-go  
 " Plugin 'fatih/vim-go' 
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'vim-airline/vim-airline'
+" Plugin 'Valloric/YouCompleteMe'
+" Plugin 'vim-airline/vim-airline-themes'
+" Plugin 'vim-airline/vim-airline'
 " Plugin 'SirVer/ultisnips'
   
-" All of your Plugins must be added before the following line  
-call vundle#end()            " required  
-filetype plugin indent on    " required  
-" To ignore plugin indent changes, instead use:  
-"filetype plugin on  
-"  
-" Brief help  
-" :PluginList       - lists configured plugins  
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate  
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache  
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal  
-"  
-" see :h vundle for more details or wiki for FAQ  
-" Put your non-Plugin stuff after this line
-
-" YCM settings
-let g:ycm_key_list_select_completion = ['', '']
-let g:ycm_key_list_previous_completion = ['']
-let g:ycm_key_invoke_completion = '<C-Space>'
-" let g:ycm_filetype_specific_completion_to_disable = {'c':1 , 'cpp':1}
-let g:ycm_autoclose_preview_window_after_completion = 1
-" let g:ycm_min_num_of_chars_for_completion = 1
-
-" UltiSnips setting
-" let g:UltiSnipsExpandTrigger = '<tab>'
-" let g:UltiSnipsJumpForwardTrigger = '<tab>'
-" let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-
+" call vundle#end()            " required  
+filetype plugin indent on      " required  
 " airline setting
 let g:airline_theme='base16_bespin'
 " let g:airline_theme='molokai'
 " let g:airline#extensions#tabline#enabled = 1
 
-
 " nmap <leader>1 <Plug>AirlineSelectTab1
 
-"statusline                                                                                                                                
-" set statusline=
-" set statusline+=%7*\[%n]                                  "buffernr
-" set statusline+=%9*\ %<%m%r%w\ %P\                        "Modified? Read only? Top/bottom
-" set statusline+=%2*\ %y\                                  "文件类型
-" set statusline+=%4*\ %{&ff}\                              "文件系统(dos/unix..) 
-" set statusline+=%5*\ %{&spelllang}\%{HighlightSearch()}\  "语言 & 是否高亮，H表示高亮?
-" set statusline+=%3*\ %{''.(&fenc!=''?&fenc:&enc).''}      "编码1
-" set statusline+=%3*\ %{(&bomb?\",bom\":\"\")}           "编码2
-" set statusline+=%1*\ %f\                                  "文件路径
-" set statusline+=%8*\ %=\ row:%l/%L " (%03p%%)\            "光标所在行号/总行数 (百分比)
-" set statusline+=%6*\ (%03p%%)  
-" set statusline+=%9*\ col:%03c\                            "光标所在列
+" Required for operations modifying multiple buffers like rename.
+
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['/home/wangha/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+    \ 'python': ['/snap/bin/pyls'],
+    \ 'c': ['/usr/bin/ccls'],
+    \ 'cpp': ['/usr/bin/ccls'],
+    \ }
+
+let g:LanguageClient_diagnosticsEnable = 0
+
+let g:deoplete#enable_at_startup = 1
+" note that if you are using Plug mapping you should not use `noremap` mappings.
+nmap <F5> <Plug>(lcn-menu)
+" Or map each action separately
+nmap <silent> gh <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> gr <Plug>(lcn-references)
+nmap <silent> gs <Plug>(lcn-symbols)
+nmap <silent> gl <Plug>(lcn-highlight)
+nmap <silent> <F2> <Plug>(lcn-rename)
+
+set statusline+=%9*\ col:%03c\                            "光标所在列
 function! HighlightSearch()
       if &hls
           return 'H'
@@ -234,4 +248,18 @@ highlight DiffDelete ctermbg=235  ctermfg=131  guibg=#262626 guifg=#af5f5f cterm
 highlight DiffChange ctermbg=235  ctermfg=103  guibg=#262626 guifg=#8787af cterm=reverse gui=reverse
 " 差异的文字 "
 highlight DiffText ctermbg=235  ctermfg=208  guibg=#262626 guifg=#ff8700 cterm=reverse gui=reverse
+
+" UltiSnips setting
+" let g:UltiSnipsExpandTrigger = '<tab>'
+" let g:UltiSnipsJumpForwardTrigger = '<tab>'
+" let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
+"  
+" Brief help  
+" :PluginList       - lists configured plugins  
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate  
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache  
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal  
+"  
+" see :h vundle for more details or wiki for FAQ  
+" Put your non-Plugin stuff after this line
 
