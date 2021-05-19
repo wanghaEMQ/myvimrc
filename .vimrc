@@ -66,12 +66,10 @@ set ruler
 set nofoldenable
 """""""""""""""""设置折叠"""""""""""""""""""""
 "
-"根据语法折叠
-"set foldmethod=syntax
-set foldmarker={,}
+"根据marker折叠
 set foldmethod=marker
-"set foldtext=substitute(getline(v:foldstart),'{.*','{...}',)
 
+"bugs in nvim?
 autocmd! Syntax c,cpp,h,cc normal zA
 autocmd! Syntax c,cpp,h,cc normal zR
 
@@ -101,6 +99,11 @@ se cul
 "显示输入的命令
 set showcmd
 
+"Make vimdiff not readonly
+if &diff
+	set noro
+endif
+
 "被分割窗口之间显示空白
 set fillchars=vert:/
 
@@ -108,6 +111,7 @@ set fillchars=stl:/
 
 set fillchars=stlnc:/
 
+"split时右下优先
 set splitright
 set splitbelow
 
@@ -117,13 +121,13 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 nnoremap <C-M> <C-W><C-W>
-"nnoremap <Nul> <C-W><C-W>
 tnoremap <C-N> <C-\><C-N>
 
 " CTags about
 map <C-]> :split <CR>:exec("tag ".expand("<cword>"))<CR>
 " set tags+=~/docu/git/nanomq/tags
-" set tags+=~/docu/git/wanghaNanomq/nanomq/tags
+
+set tags=./tags;/
 
 " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
@@ -151,52 +155,22 @@ endif
 
 call plug#end()
 
-" -------------  
-" Vundle  
-" https://github.com/gmarik/Vundle.vim  
-" -------------  
-  
-" set the runtime path to include Vundle and initialize  
-" set rtp+=~/.vim/bundle/Vundle.vim  
-" call vundle#begin()  
-  
-" let Vundle manage Vundle, required  
-" Plugin 'gmarik/Vundle.vim'  
-  
-" The following are examples of different formats supported.  
-" Keep Plugin commands between vundle#begin/end.  
-" plugin on GitHub repo  
-" Plugin 'tpope/vim-fugitive'  
-" plugin from http://vim-scripts.org/vim/scripts.html  
-" Git plugin not hosted on GitHub  
-" Plugin 'git://git.wincent.com/command-t.git'  
-" git repos on your local machine (i.e. when working on your own plugin)  
-" Plugin 'file:///home/gmarik/path/to/plugin'  
-" The sparkup vim script is in a subdirectory of this repo called vim.  
-" Pass the path to set the runtimepath properly.  
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}  
-" Avoid a name conflict with L9  
-""Plugin 'user/L9', {'name': 'newL9'}
+" -------------
+" Vundle (abandoned now)
+" https://github.com/gmarik/Vundle.vim
+" -------------
+" call vundle#end()
 
-" Plugin 'fatih/vim-go' 
-" Plugin 'Valloric/YouCompleteMe'
-" Plugin 'vim-airline/vim-airline-themes'
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'SirVer/ultisnips'
-  
-" call vundle#end()            " required  
 filetype plugin indent on      " required  
+
 " airline setting
 let g:airline_theme='base16_bespin'
 " let g:airline_theme='molokai'
 " let g:airline#extensions#tabline#enabled = 1
 
-" nmap <leader>1 <Plug>AirlineSelectTab1
-
-" Required for operations modifying multiple buffers like rename.
-
 set hidden
 
+" lc setting
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['/home/wangha/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
@@ -226,18 +200,18 @@ function! HighlightSearch()
           return 'h'
       endif
 endfunction
-hi User1 ctermfg=white  ctermbg=darkred
-hi User2 ctermfg=blue  ctermbg=58
-hi User3 ctermfg=white  ctermbg=100
-hi User4 ctermfg=darkred  ctermbg=95
-hi User5 ctermfg=darkred  ctermbg=77
-hi User6 ctermfg=white  ctermbg=blue
-hi User7 ctermfg=darkred  ctermbg=blue  cterm=bold
-hi User8 ctermfg=231  ctermbg=blue
-hi User9 ctermfg=blue  ctermbg=black
-hi User0 ctermfg=yellow  ctermbg=13
 
-set tags=./tags;/
+" User color schema
+hi User1 ctermfg=white   ctermbg=darkred
+hi User2 ctermfg=blue    ctermbg=58
+hi User3 ctermfg=white   ctermbg=100
+hi User4 ctermfg=darkred ctermbg=95
+hi User5 ctermfg=darkred ctermbg=77
+hi User6 ctermfg=white   ctermbg=blue
+hi User7 ctermfg=darkred ctermbg=blue  cterm=bold
+hi User8 ctermfg=231     ctermbg=blue
+hi User9 ctermfg=blue    ctermbg=black
+hi User0 ctermfg=yellow  ctermbg=13
 
 "vimdiff config
 " 新增的行 "
@@ -248,18 +222,4 @@ highlight DiffDelete ctermbg=235  ctermfg=131  guibg=#262626 guifg=#af5f5f cterm
 highlight DiffChange ctermbg=235  ctermfg=103  guibg=#262626 guifg=#8787af cterm=reverse gui=reverse
 " 差异的文字 "
 highlight DiffText ctermbg=235  ctermfg=208  guibg=#262626 guifg=#ff8700 cterm=reverse gui=reverse
-
-" UltiSnips setting
-" let g:UltiSnipsExpandTrigger = '<tab>'
-" let g:UltiSnipsJumpForwardTrigger = '<tab>'
-" let g:UltiSnipsJumpBackwardTrigger = '<s-tab>'
-"  
-" Brief help  
-" :PluginList       - lists configured plugins  
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate  
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache  
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal  
-"  
-" see :h vundle for more details or wiki for FAQ  
-" Put your non-Plugin stuff after this line
 
