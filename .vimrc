@@ -15,7 +15,7 @@ set encoding=utf-8
 set fileencodings=utf-8,gbk
 
 "require
-filetype off
+filetype on
 
 "不需要备份
 set nobackup
@@ -115,7 +115,7 @@ set fillchars=stlnc:/
 set splitright
 set splitbelow
 
-nnoremap '<'C-J'>' '<'C-W'>''<'C-J'>'
+nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
@@ -124,7 +124,7 @@ nnoremap <C-M> <C-W><C-W>
 tnoremap <C-N> <C-\><C-N>
 
 " CTags about
-map <C-]> :split <CR>:exec("tag ".expand("<cword>"))<CR>
+" map <C-]> :split <CR>:exec("tag ".expand("<cword>"))<CR>
 " set tags+=~/docu/git/nanomq/tags
 
 set tags=./tags;/
@@ -142,6 +142,14 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'junegunn/fzf'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-airline/vim-airline'
+Plug 'will133/vim-dirdiff'
+Plug 'mtikekar/vim-bsv'
+Plug 'rhysd/vim-clang-format'
+Plug 'luochen1990/rainbow'
+Plug 'yegappan/taglist'
+" Theme
+Plug 'gilgigilgil/anderson.vim'
+Plug 'ajmwagar/vim-deus'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -159,12 +167,19 @@ call plug#end()
 " Vundle (abandoned now)
 " https://github.com/gmarik/Vundle.vim
 " -------------
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
+
+" Plugin 'VundleVim/Vundle.vim'
+" Plugin 'mtikekar/vim-bsv'
+
 " call vundle#end()
 
 filetype plugin indent on      " required  
 
 " airline setting
-let g:airline_theme='base16_bespin'
+" let g:airline_theme='base16_bespin'
+let g:airline_theme='base16'
 " let g:airline_theme='molokai'
 " let g:airline#extensions#tabline#enabled = 1
 
@@ -181,8 +196,23 @@ let g:LanguageClient_serverCommands = {
 
 let g:LanguageClient_diagnosticsEnable = 0
 
+" rainbow setting
+let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+
+" Tlist setting
+let Tlist_Show_One_File = 1
+let Tlist_Exit_OnlyWindow = 1
+let Tlist_Auto_Open = 1
+let Tlist_Use_Right_Window = 1
+
+nmap <silent> gt <Esc>:TlistToggle<Cr>
+
+" Global Theme
+colorscheme deus
+
 let g:deoplete#enable_at_startup = 1
 " note that if you are using Plug mapping you should not use `noremap` mappings.
+
 nmap <F5> <Plug>(lcn-menu)
 " Or map each action separately
 nmap <silent> gh <Plug>(lcn-hover)
@@ -190,7 +220,6 @@ nmap <silent> gd <Plug>(lcn-definition)
 nmap <silent> gr <Plug>(lcn-references)
 nmap <silent> gs <Plug>(lcn-symbols)
 nmap <silent> gl <Plug>(lcn-highlight)
-nmap <silent> <F2> <Plug>(lcn-rename)
 
 set statusline+=%9*\ col:%03c\                            "光标所在列
 function! HighlightSearch()

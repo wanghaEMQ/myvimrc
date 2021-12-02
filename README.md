@@ -9,11 +9,11 @@ Vim & Nvim supported.
 + Type space to fold & unfold according Syntax {,}
 + Language client supported and some configure for it.
 + Some useful map for Language client.
-+ An amazing airline theme.
++ Amazing themes for vim & airline.
 + Color schema customize in Vimdiff.
++ Comfortable shortcut to move between windows.
++ Ctaglist supported.
 
 ## TODO
 
 1. [Feature] Make buffers decorated.
-2. [Bug] Type enter to go into hover not working sometimes.
-3. [Feature] Change tab setting according project path.
