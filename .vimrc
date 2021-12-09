@@ -202,8 +202,10 @@ let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowTo
 " Tlist setting
 let Tlist_Show_One_File = 1
 let Tlist_Exit_OnlyWindow = 1
-let Tlist_Auto_Open = 1
+" let Tlist_Auto_Open = 1
 let Tlist_Use_Right_Window = 1
+
+:autocmd FileType c,cc,cpp,h,hpp,py,rs TlistOpen | wincmd p
 
 nmap <silent> gt <Esc>:TlistToggle<Cr>
 
