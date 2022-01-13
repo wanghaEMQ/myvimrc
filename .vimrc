@@ -89,9 +89,6 @@ set laststatus=2
 "显示位置
 set ruler
 
-"浅色显示当前行
-"autocmd InsertLeave * se nocul
-
 "用浅色高亮当前行
 "autocmd InsertEnter * se cul
 se cul
@@ -124,9 +121,6 @@ nnoremap <C-M> <C-W><C-W>
 tnoremap <C-N> <C-\><C-N>
 
 " CTags about
-" map <C-]> :split <CR>:exec("tag ".expand("<cword>"))<CR>
-" set tags+=~/docu/git/nanomq/tags
-
 set tags=./tags;/
 
 " Specify a directory for plugins
@@ -205,7 +199,7 @@ let Tlist_Exit_OnlyWindow = 1
 " let Tlist_Auto_Open = 1
 let Tlist_Use_Right_Window = 1
 
-:autocmd FileType c,cc,cpp,h,hpp,py,rs TlistOpen | wincmd p
+autocmd FileType c,cc,cpp,h,hpp,py,rs TlistOpen | wincmd p
 
 nmap <silent> gt <Esc>:TlistToggle<Cr>
 
